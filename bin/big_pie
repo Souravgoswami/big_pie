@@ -9,5 +9,9 @@ end
 
 n = (ARGV[0] || rand(50..5000)).to_i
 
+time = Time.now
 pi = BigPie.calculate(n).join.tap { |x| x[1, 0] = ?. }
+time2 = Time.now - time
+
 puts "Here's #{n} Pi digits for you:\n#{pi}\n"
+puts "Time taken: #{time2}"
