@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+# begin
+	require 'big_pie'
+# rescue LoadError
+	# abort "BigPie isn't installed. Please install the gem before running this interactive console"
+# end
+
+$-v = true
+require "irb"
+IRB.start(__FILE__)
