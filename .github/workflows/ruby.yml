@@ -32,4 +32,4 @@ jobs:
     - name: Install BigPie
       run: rake install
     - name: Run tests
-      run: bin/big_pie 500
+      run: bin/big_pie 5000
