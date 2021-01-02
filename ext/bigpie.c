@@ -16,13 +16,16 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 	VALUE ary = rb_ary_new() ;
 	VALUE shove = rb_intern("<<") ;
 
-	uint64_t num = NUM2ULL(number) ;
-	uint64_t index = 0 ;
-	uint8_t comp ;
+	VALUE _rb_one = INT2FIX(0) ;
+	if (rb_funcallv_public(number, rb_intern("<"), 1, &_rb_one)) return ary ;
+
+	register uint64_t num = NUM2ULL(number) ;
+	register uint64_t index = 0 ;
+	register uint8_t comp ;
 
 	mpz_t q, t, k, m, x, r ;
 	mpz_t m_t ;
-	mpz_t temp1, temp2 ;
+	mpz_t temp1 ;
 
 	mpz_init(q) ;
 	mpz_init(t) ;
@@ -32,7 +35,6 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 	mpz_init(r) ;
 	mpz_init(m_t) ;
 	mpz_init(temp1) ;
-	mpz_init(temp2) ;
 
 	mpz_set_ui(q, 1) ;
 	mpz_set_ui(t, 1) ;
@@ -42,8 +44,8 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 	mpz_set_ui(r, 0) ;
 
 	while(index < num) {
-		mpz_mul_ui(temp1, q, 4) ;
-		mpz_add(temp1, temp1, r) ;
+		mpz_set(temp1, r) ;
+		mpz_addmul_ui(temp1, q, 4) ;
 		mpz_sub(temp1, temp1, t) ;
 		mpz_mul(m_t, m, t) ;
 
@@ -55,16 +57,14 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 
 			//m
 			mpz_mul_ui(temp1, q, 3) ;
-			mpz_add(temp1, temp1, r) ;
-			mpz_mul_ui(temp1, temp1, 10) ;
+			mpz_addmul_ui(temp1, r, 10) ;
 			mpz_tdiv_q(temp1, temp1, t) ;
-			mpz_mul_ui(temp2, m, 10) ;
-			mpz_sub(m, temp1, temp2) ;
+			mpz_submul_ui(temp1, m, 10) ;
+			mpz_set(m, temp1) ;
 
 			// r
-			mpz_set(temp1, m_t) ;
-			mpz_sub(temp1, r, temp1) ;
-			mpz_mul_ui(r, temp1, 10) ;
+			mpz_sub(r, r, m_t) ;
+			mpz_mul_ui(r, r, 10) ;
 
 			//q
 			mpz_mul_ui(q, q, 10) ;
@@ -74,16 +74,13 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 
 			// m
 			mpz_mul_ui(temp1, k, 7) ;
-			mpz_add_ui(temp1, temp1, 2) ;
-			mpz_mul(temp1, temp1, q) ;
-			mpz_mul(temp2, r, x) ;
-			mpz_add(temp1, temp1, temp2) ;
+			mpz_addmul_ui(temp1, q, 2) ;
+			mpz_addmul(temp1, r, x) ;
 			mpz_tdiv_q(m, temp1, t) ;
 
 			// r
-			mpz_mul_ui(temp1, q, 2) ;
-			mpz_add(temp1, temp1, r) ;
-			mpz_mul(r, temp1, x) ;
+			mpz_addmul_ui(r, q, 2) ;
+			mpz_mul(r, r, x) ;
 
 			// q
 			mpz_mul(q, q, k) ;
@@ -104,7 +101,6 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 	mpz_clear(r) ;
 	mpz_clear(m_t) ;
 	mpz_clear(temp1) ;
-	mpz_clear(temp2) ;
 
 	return ary ;
 }
