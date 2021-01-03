@@ -1,14 +1,14 @@
 # BigPie
+BigPie is a Rubygem that uses GMP library to calculate Pi up to n digits.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/big_pie`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The maximum argument it can accept is a long long unsigned int.
 
 ## Dependency
-This library depends on GMP.
+This library depends on GMP, and ruby development library.
 
 + Install GMP on Arch Linux:
 
+Ruby on Arch Linux provides ruby.h header file, so all you need is the GMP library:
 ```
 # pacman -S gmp
 ```
@@ -16,7 +16,7 @@ This library depends on GMP.
 + On Debian / Ubuntu / LinuxMint:
 
 ```
-# apt install libgmp-dev
+# apt install libgmp-dev ruby-dev
 ```
 
 Once done, you can follow the installation steps.
@@ -30,12 +30,14 @@ gem 'big_pie'
 ```
 
 And then execute:
-
-    $ bundle install
+```
+$ bundle install
+```
 
 Or install it yourself as:
-
-    $ gem install big_pie
+```
+$ gem install big_pie
+```
 
 ## Usage
 
@@ -76,8 +78,8 @@ You can also run `bin/console` for an interactive prompt that will allow you to 
 To install this gem onto your local machine, run `rake install`.
 
 ## Contributing
-Bug reports and pull requests are welcome on GitHub at https://github.com/Souravgoswami/big_pie. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/big_pie/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/Souravgoswami/big_pie.
 
-## License
+## Licence
 
 The gem is available as open-source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
