@@ -12,7 +12,7 @@
 	#pragma intel optimization_level 3
 #endif
 
-VALUE calculatePi(volatile VALUE obj, VALUE number) {
+VALUE calculatePi(volatile VALUE obj, volatile VALUE number) {
 	VALUE ary = rb_ary_new() ;
 	VALUE shove = rb_intern("<<") ;
 
@@ -21,10 +21,9 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 
 	register uint64_t num = NUM2ULL(number) ;
 	register uint64_t index = 0 ;
-	register uint8_t comp ;
+	register int8_t comp ;
 
 	mpz_t q, t, k, m, x, r ;
-	mpz_t m_t ;
 	mpz_t temp1 ;
 
 	mpz_init(q) ;
@@ -33,7 +32,6 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 	mpz_init(m) ;
 	mpz_init(x) ;
 	mpz_init(r) ;
-	mpz_init(m_t) ;
 	mpz_init(temp1) ;
 
 	mpz_set_ui(q, 1) ;
@@ -44,51 +42,33 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 	mpz_set_ui(r, 0) ;
 
 	while(index < num) {
-		mpz_set(temp1, r) ;
+		mpz_sub(temp1, r, t) ;
 		mpz_addmul_ui(temp1, q, 4) ;
-		mpz_sub(temp1, temp1, t) ;
-		mpz_mul(m_t, m, t) ;
+		mpz_submul(temp1, m, t) ;
 
-		comp = mpz_cmp(m_t, temp1) ;
-		if(comp == 1) {
+		comp = mpz_cmp_ui(temp1, 0) ;
+
+		if(comp < 0) {
 			++index ;
 			VALUE m_to_ui = INT2FIX(mpz_get_ui(m)) ;
 			rb_funcallv_public(ary, shove, 1, &m_to_ui) ;
 
-			//m
-			mpz_mul_ui(temp1, q, 3) ;
-			mpz_addmul_ui(temp1, r, 10) ;
-			mpz_tdiv_q(temp1, temp1, t) ;
-			mpz_submul_ui(temp1, m, 10) ;
-			mpz_set(m, temp1) ;
-
 			// r
-			mpz_sub(r, r, m_t) ;
+			mpz_submul(r, m, t) ;
 			mpz_mul_ui(r, r, 10) ;
 
-			//q
+			mpz_submul_ui(m, m, 10) ;
 			mpz_mul_ui(q, q, 10) ;
 		} else {
-			// t
 			mpz_mul(t, t, x) ;
-
-			// m
-			mpz_mul_ui(temp1, k, 7) ;
-			mpz_addmul_ui(temp1, q, 2) ;
-			mpz_addmul(temp1, r, x) ;
-			mpz_tdiv_q(m, temp1, t) ;
 
 			// r
 			mpz_addmul_ui(r, q, 2) ;
 			mpz_mul(r, r, x) ;
 
-			// q
+			mpz_tdiv_q(m, r, t) ;
 			mpz_mul(q, q, k) ;
-
-			// k
 			mpz_add_ui(k, k, 1) ;
-
-			// x
 			mpz_add_ui(x, x, 2) ;
 		}
 	}
@@ -99,7 +79,6 @@ VALUE calculatePi(volatile VALUE obj, VALUE number) {
 	mpz_clear(m) ;
 	mpz_clear(x) ;
 	mpz_clear(r) ;
-	mpz_clear(m_t) ;
 	mpz_clear(temp1) ;
 
 	return ary ;
