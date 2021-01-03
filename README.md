@@ -63,9 +63,9 @@ To convert the array to Pi:
 The time it takes to calculate a Pi depends on the system.
 But you can predict the time for a big number.
 
-It takes to calculate 3*n the size of it will take 10x the time it takes to calculate n.
+To calculate 3 * n, it will take 10x the time it takes to calculate n.
 
-For example [under no CPU load], if 1000 digits takes 0.005 seconds, to calculate 1000 digits,
+For example [under no CPU load], if calculating 1000 digits takes 0.005 seconds,
 it will take 10 * 0.005 = 0.05 seconds to calculate 3000 digits;
 and 0.5 seconds to calculate 9000 digits.
 
