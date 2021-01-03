@@ -59,6 +59,16 @@ To convert the array to Pi:
 => "3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067"
 ```
 
+## Time
+The time it takes to calculate a Pi depends on the system.
+But you can predict the time for a big number.
+
+It takes to calculate 3*n the size of it will take 10x the time it takes to calculate n.
+
+For example [under no CPU load], if 1000 digits takes 0.005 seconds, to calculate 1000 digits,
+it will take 10 * 0.005 = 0.05 seconds to calculate 3000 digits;
+and 0.5 seconds to calculate 9000 digits.
+
 ## Development
 After checking out the repo, run `bin/setup` to install dependencies.
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.

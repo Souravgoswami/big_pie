@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
 	s.authors = ["Sourav Goswami"]
 	s.email = ["souravgoswami@protonmail.com"]
 	s.summary = "Calculate N Digits of Pi, argument upto unsigned long long (generally 2 ** 64 - 1)"
-	s.description = "Calculate N Digits of Pi, argument upto unsigned long long (generally 2 ** 64 - 1)"
+	s.description = s.summary
 	s.homepage = "https://www.github.com/Souravgoswami/big_pie"
 	s.license = "MIT"
 	s.required_ruby_version = Gem::Requirement.new(">= 2.1.0")
