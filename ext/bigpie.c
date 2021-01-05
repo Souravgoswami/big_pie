@@ -10,14 +10,17 @@
 VALUE calculatePi(volatile VALUE obj, volatile VALUE number) {
 	VALUE ary = rb_ary_new() ;
 	VALUE _rb_one = INT2FIX(0) ;
+	VALUE block_given = rb_block_given_p() ;
 
 	if (rb_funcallv_public(number, rb_intern("<"), 1, &_rb_one)) {
-		return ary ;
+		if (block_given) {
+			return Qnil ;
+		} else {
+			return ary ;
+		}
 	}
 
 	VALUE shove = rb_intern("<<") ;
-	VALUE block_given = rb_block_given_p() ;
-
 	register uint64_t num = NUM2ULL(number) ;
 	register uint64_t index = 0 ;
 
@@ -46,10 +49,11 @@ VALUE calculatePi(volatile VALUE obj, volatile VALUE number) {
 		if(mpz_cmp_ui(temp1, 0) < 0) {
 			++index ;
 			VALUE m_to_ui = INT2FIX(mpz_get_ui(m)) ;
-			rb_funcallv_public(ary, shove, 1, &m_to_ui) ;
 
 			if (block_given) {
 				rb_yield_values(1, m_to_ui) ;
+			} else {
+				rb_funcallv_public(ary, shove, 1, &m_to_ui) ;
 			}
 
 			mpz_submul(r, m, t) ;
@@ -78,7 +82,11 @@ VALUE calculatePi(volatile VALUE obj, volatile VALUE number) {
 	mpz_clear(r) ;
 	mpz_clear(temp1) ;
 
-	return ary ;
+	if (block_given) {
+		return Qnil ;
+	} else {
+		return ary ;
+	}
 }
 
 void Init_bigpie() {
