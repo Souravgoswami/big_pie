@@ -2,29 +2,26 @@
 #include <inttypes.h>
 #include "ruby.h"
 
-#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
+#ifdef __GNUC__
 	#pragma GCC optimize ("Ofast")
 	#pragma GCC diagnostic warning "-Wall"
-#elif defined(__clang__)
-	#pragma clang optimize on
-	#pragma clang diagnostic warning "-Wall"
-#elif defined(__INTEL_COMPILER)
-	#pragma intel optimization_level 3
 #endif
 
 VALUE calculatePi(volatile VALUE obj, volatile VALUE number) {
 	VALUE ary = rb_ary_new() ;
-	VALUE shove = rb_intern("<<") ;
-
 	VALUE _rb_one = INT2FIX(0) ;
-	if (rb_funcallv_public(number, rb_intern("<"), 1, &_rb_one)) return ary ;
+
+	if (rb_funcallv_public(number, rb_intern("<"), 1, &_rb_one)) {
+		return ary ;
+	}
+
+	VALUE shove = rb_intern("<<") ;
+	VALUE block_given = rb_block_given_p() ;
 
 	register uint64_t num = NUM2ULL(number) ;
 	register uint64_t index = 0 ;
-	register int8_t comp ;
 
-	mpz_t q, t, k, m, x, r ;
-	mpz_t temp1 ;
+	mpz_t q, t, k, m, x, r, temp1 ;
 
 	mpz_init(q) ;
 	mpz_init(t) ;
@@ -46,14 +43,15 @@ VALUE calculatePi(volatile VALUE obj, volatile VALUE number) {
 		mpz_addmul_ui(temp1, q, 4) ;
 		mpz_submul(temp1, m, t) ;
 
-		comp = mpz_cmp_ui(temp1, 0) ;
-
-		if(comp < 0) {
+		if(mpz_cmp_ui(temp1, 0) < 0) {
 			++index ;
 			VALUE m_to_ui = INT2FIX(mpz_get_ui(m)) ;
 			rb_funcallv_public(ary, shove, 1, &m_to_ui) ;
 
-			// r
+			if (block_given) {
+				rb_yield_values(1, m_to_ui) ;
+			}
+
 			mpz_submul(r, m, t) ;
 			mpz_mul_ui(r, r, 10) ;
 
@@ -62,7 +60,6 @@ VALUE calculatePi(volatile VALUE obj, volatile VALUE number) {
 		} else {
 			mpz_mul(t, t, x) ;
 
-			// r
 			mpz_addmul_ui(r, q, 2) ;
 			mpz_mul(r, r, x) ;
 
