@@ -13,5 +13,5 @@ time = Time.now
 pi = BigPie.calculate(n).join.tap { |x| x[1, 0] = ?. }
 time2 = Time.now - time
 
-puts "Here's #{n} digits of Pi for you:\n#{pi}\n"
-puts "Time taken: #{time2}"
+puts "\e[38;2;80;80;255mHere's #{n} digits of Pi for you:\e[0m\n#{pi}\n"
+puts "\e[38;2;80;80;255mTime taken: #{time2}"
