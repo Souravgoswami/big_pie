@@ -61,6 +61,25 @@ To convert the array to Pi:
 => "3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067"
 ```
 
+You can also pass blocks:
+
+```
+irb(main):001:0> require 'big_pie'
+=> true
+irb(main):002:0* ind = 0
+=> 0
+irb(main):003:0> BigPie.calculate(5) { |x| p [x, ind += 1] }
+[3, 1]
+[1, 2]
+[4, 3]
+[1, 4]
+[5, 5]
+=> nil
+```
+
+As you can see, passing blocks won't return an Array because the values are passed to the
+blocks instead.
+
 ## Time
 The time it takes to calculate a Pi depends on the system.
 But you can predict the time for a big number.
