@@ -8,15 +8,15 @@ This library depends on GMP, and ruby development library.
 
 + Install GMP on Arch Linux:
 
-Ruby on Arch Linux provides ruby.h header file, so all you need is the GMP library:
+Ruby on Arch Linux provides ruby.h header file, so all you need is the GMP library, make, and GCC:
 ```
-# pacman -S gmp
+# pacman -S gmp make gcc
 ```
 
 + On Debian / Ubuntu / LinuxMint:
 
 ```
-# apt install libgmp-dev ruby-dev
+# apt install libgmp-dev ruby-dev make gcc
 ```
 
 Once done, you can follow the installation steps.
