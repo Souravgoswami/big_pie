@@ -78,7 +78,7 @@ irb(main):003:0> BigPie.calculate(5) { |x| p [x, ind += 1] }
 ```
 
 As you can see, passing blocks won't return an Array because the values are passed to the
-blocks instead.
+block variables instead.
 
 ## Time
 The time it takes to calculate a Pi depends on the system.
