@@ -48,12 +48,12 @@ VALUE calculatePi(volatile VALUE obj, volatile VALUE number) {
 
 		if(mpz_cmp_ui(temp1, 0) < 0) {
 			++index ;
-			VALUE m_to_ui = INT2FIX(mpz_get_ui(m)) ;
+			VALUE m_to_ui = UINT2NUM(mpz_get_ui(m)) ;
 
 			if (block_given) {
 				rb_yield_values(1, m_to_ui) ;
 			} else {
-				rb_funcallv_public(ary, shove, 1, &m_to_ui) ;
+				rb_ary_push(ary, m_to_ui) ;
 			}
 
 			mpz_submul(r, m, t) ;
